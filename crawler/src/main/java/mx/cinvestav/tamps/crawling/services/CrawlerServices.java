@@ -39,7 +39,7 @@ import mx.cinvestav.tamps.crawling.exceptions.ServiceException;
  * @author ealdana@tamps.cinvestav.mx
  */
 @Path("crawler")
-public class CrawlerService {
+public class CrawlerServices {
     
     /**
      *Test service
@@ -72,7 +72,7 @@ public class CrawlerService {
      */
     @GET
     @Path("sendMsg")
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_JSON)
     public Message sendMsg(@QueryParam("sender") String sender,
             @QueryParam("content") String content) {
         return new Message(sender, content);
@@ -112,7 +112,7 @@ public class CrawlerService {
             
         } 
         catch (Throwable t) {
-            Logger.getLogger(CrawlerService.class.getName()).log(Level.SEVERE, "Severe error has ocurred, an empty document will be returned",t);  
+            Logger.getLogger(CrawlerServices.class.getName()).log(Level.SEVERE, "Severe error has ocurred, an empty document will be returned",t);  
             return new JAXBElement<>(new QName("CinvestavDocument"), CinvestavDocument.class, doc);
         }
         
@@ -170,7 +170,7 @@ public class CrawlerService {
                }
                catch(Throwable t)
                {   Object[]params={url,contentType};
-                   Logger.getLogger(CrawlerService.class.getName()).log(Level.WARNING, "Error obtaining a document from {0} with content-type {1}",params);  
+                   Logger.getLogger(CrawlerServices.class.getName()).log(Level.WARNING, "Error obtaining a document from {0} with content-type {1}",params);  
                    continue;
                }
                    
@@ -178,7 +178,7 @@ public class CrawlerService {
             return docs;
         } 
         catch (Throwable t) {
-            Logger.getLogger(CrawlerService.class.getName()).log(Level.SEVERE, "Severe error has ocurred.",t);
+            Logger.getLogger(CrawlerServices.class.getName()).log(Level.SEVERE, "Severe error has ocurred.",t);
             return docs;
         }
         
@@ -210,7 +210,7 @@ public class CrawlerService {
             q.setQueryDate(new Date());
         } 
         catch (Throwable t) {
-            Logger.getLogger(CrawlerService.class.getName()).log(Level.SEVERE, "Severe error has ocurred.",t);  
+            Logger.getLogger(CrawlerServices.class.getName()).log(Level.SEVERE, "Severe error has ocurred.",t);  
             throw new ServiceException(t);
         }
         

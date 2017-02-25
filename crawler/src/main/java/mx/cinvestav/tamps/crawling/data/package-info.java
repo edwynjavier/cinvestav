@@ -1,5 +1,5 @@
 /**
- * Contains the classes that implement functionalities related to data and 
+ * Contains the classes that implement functionalities related to  data access and 
  * persistence.
  */
 
