@@ -11,4 +11,8 @@ package mx.cinvestav.tamps.util.net;
  */
 public class PruebaGit {
     
+    
+    public static void main(String args[])
+    {}
+    
 }
