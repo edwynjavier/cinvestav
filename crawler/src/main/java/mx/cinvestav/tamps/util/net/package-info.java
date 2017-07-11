@@ -1,6 +1,6 @@
 /**
  * Contains  classes that implement functionalitity related to networks
- * processes. Esto es una prueba. 
+ * processes.
  */     
 
 package mx.cinvestav.tamps.util.net;
