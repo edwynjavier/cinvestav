@@ -79,6 +79,14 @@ public class HTMLScraper implements IScraper{
     }
 
     
-    
+    public static void main(String args[]){
+        try{
+            HTMLScraper html=new HTMLScraper();
+            CinvestavDocument doc=html.getRawText("http://www.eluniversal.com.mx");
+            System.out.println(doc.getText());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     
 }
