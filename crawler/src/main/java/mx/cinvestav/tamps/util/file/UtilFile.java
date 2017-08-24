@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mx.cinvestav.tamps.tm.ner;
+package mx.cinvestav.tamps.util.file;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

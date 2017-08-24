@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mx.cinvestav.tamps.tm.ner;
-
 
 import java.io.File;
 import java.sql.Connection;
@@ -12,11 +6,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import mx.cinvestav.tamps.util.file.UtilFile;
 
 /**
- *
+ * It allows us to apply different tasks relative to the search process of named
+ * entities from a text dataset.
  * @author marcofuentes
  */
 public class EntitiesFinder {
@@ -35,7 +33,18 @@ public class EntitiesFinder {
     static Connection con=null;
     static String DIRECTORY="data";
     
-    public static void processLocation(String fileName, String schema, int cant)throws Exception
+    /**
+     * It allows us to obtain preliminar tokens relative to possible entities
+     * associated into the text of a document
+     * @param fileName Document name
+     * @param schema   Database schema in which the information will be stored
+     * @param length   Length of the tokens to be stored
+     * @param type     Type of cantidate entity
+     * @param lang     Language identifier
+     * @throws Exception 
+     */
+    public  void processDataEntity(String fileName, String schema, int length,
+                                   char type, String lang)throws Exception
     {
         int i;
         String place=fileName.substring(0, fileName.indexOf(".txt"));
@@ -62,32 +71,36 @@ public class EntitiesFinder {
                 q = words.get(i);
                 if(q.equals(place)) {
                     p = ""; s = "";
-                    for(int j = cant; j > 0; j--) {
+                    for(int j = length; j > 0; j--) {
                         try{
                             p += words.get(i - j) + " ";
                         } catch(Error e){
-                            
+                             Logger.getLogger(EntitiesFinder.class.getName()).log(Level.WARNING, null, e);
                         } finally{
                             continue;
                         }
                     }
-                    for(int j = 1; j <= cant; j++){
+                    for(int j = 1; j <= length; j++){
                         try{
                             s += words.get(i + j) + " ";
                         } catch(Error e){
-                            
+                            Logger.getLogger(EntitiesFinder.class.getName()).log(Level.WARNING, null, e);
                         } finally{
                             continue;
                         }
                     }
-                    sql = "INSERT INTO " + schema + ".location_candidate2(sentence,entitie,pre,suf,cant) "
-                            + "values (?,?,?,?,?)";
+                    sql = "INSERT INTO " + schema + ".candidate_entities(sentence,pre,name,suf, length, type, lang) "
+                            + "values (?,?,?,?,?,?,?)";
+                    
+   
                     stm=con.prepareStatement(sql);
                     stm.setString(1, line);
-                    stm.setString(2, q);
-                    stm.setString(3, p);
+                    stm.setString(2, p);
+                    stm.setString(3, q);
                     stm.setString(4, s);
-                    stm.setInt(5, cant);
+                    stm.setInt(5, length);
+                    stm.setString(6, String.valueOf(type));
+                    stm.setString(7, String.valueOf(lang));
                     stm.execute();
                 }
             }
@@ -106,10 +119,12 @@ public class EntitiesFinder {
         String [] archivos = directorio.list();
 		
 		//Number of prefixes and suffixes
-        int cant = 1;
+        int length = 3;
+        char type='L';
+        EntitiesFinder ef=new EntitiesFinder();
         for(String s:archivos){
             try{
-             processLocation(s, schema, cant);
+             ef.processDataEntity(s, schema, length,type,"ESP");
              System.out.println("Archivo "+s+" procesado");
             }
             catch(Exception e)
@@ -126,7 +141,6 @@ public class EntitiesFinder {
     
     /**
     * Returns string without diacritics - 7 bit approximation.
-    *
     * @param source string to convert
     * @return corresponding string without diacritics
     */
