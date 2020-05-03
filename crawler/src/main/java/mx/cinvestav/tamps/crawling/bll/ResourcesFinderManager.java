@@ -12,7 +12,7 @@ import mx.cinvestav.tamps.crawling.bll.impl.GoogleScholarResourcesFinder;
 import mx.cinvestav.tamps.crawling.bll.impl.HTMLScraper;
 
 /**
- * Defines some utilitary methods to manage {@link IResourcesFinder} implementations
+ * Allows to define some utilitary methods to manage {@link IResourcesFinder} implementations
  * @author ealdana@tamps.cinvestav.mx
  */
 public class ResourcesFinderManager {
